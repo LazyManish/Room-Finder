@@ -2,7 +2,7 @@ from rest_framework import serializers
 from Room.models import Room
 
 
-class RoomSerializer(serializers.ModelField):
+class RoomSerializer(serializers.ModelSerializer):
 
     image = serializers.ImageField(required = True)
 
@@ -10,8 +10,8 @@ class RoomSerializer(serializers.ModelField):
         model = Room
         fields = ['description','image','price','address']
     
-    def clean_price(self):
-        price = self.cleaned_data.get('price')
+    def clean_price(self,validated_data):
+        price = validated_data.get('price')
 
         if price <= 0:
             raise serializers.ValidationError("Price must be greater than 0.")
@@ -23,5 +23,5 @@ class GetRoomSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Room
-        fields = ['id','description','image','price','address']
+        fields = ['id','admin','description','image','price','address']
 
