@@ -15,8 +15,8 @@ class RoomSerializer(serializers.ModelSerializer):
 
         if price <= 0:
             raise serializers.ValidationError("Price must be greater than 0.")
-        if price > 10000:
-            raise serializers.ValidationError("Price cannot exceed 10,000.")
+        if price > 100000:
+            raise serializers.ValidationError("Price cannot exceed 1,00,000.")
         return price
 
 class GetRoomSerializer(serializers.ModelSerializer):
