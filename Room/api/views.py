@@ -12,11 +12,12 @@ class RoomAPIView(APIView):
 
     def post(self,request):
 
-        data = request.data
         
         try:
+            data = request.data
 
             serializer = RoomSerializer(data=data)
+
             if serializer.is_valid():
                 serializer.save(admin = request.user)
                 return Response({"message":"Room Created Successfully."},status=status.HTTP_201_CREATED)
@@ -27,23 +28,30 @@ class RoomAPIView(APIView):
     
     def get(self,request):
 
-        admin = request.user
-
         try:
+            admin = request.user
+
+            if admin.role == 'buyer':
+
+                rooms = Room.objects.all()
+                serializer =GetRoomSerializer(rooms, many =True)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
             
-            rooms = Room.objects.filter(admin = admin)
-            serializer = GetRoomSerializer(rooms, many = True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+            
+                rooms = Room.objects.filter(admin = admin)
+                serializer = GetRoomSerializer(rooms, many = True)
+                return Response(serializer.data, status=status.HTTP_200_OK)
         
         except Exception as e:
-            return Response({"error":str(e)},status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error":str(e)},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
     def put(self, request, pk):
 
-        admin=request.user
-        data=request.data
 
         try:
+            admin=request.user
+            data=request.data
 
             room = Room.objects.get(pk=pk, admin=admin )  
             serializer = RoomSerializer(room, data=data)
@@ -53,21 +61,20 @@ class RoomAPIView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
         except Exception as e:
-            return Response({"error":str(e)},status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error":str(e)},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
 
     def delete(self, request, pk):
-        
-        admin = request.user
-
+    
         try:
+            admin = request.user
 
             room = Room.objects.get(pk=pk, admin=admin)  
             room.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         
         except Exception as e:
-            return Response({"error":str(e)},status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error":str(e)},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
         
 
