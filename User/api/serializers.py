@@ -10,17 +10,14 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ['username','first_name','last_name','email','role','password','password2']
+        fields = ['username','first_name','last_name','role','password','password2']
 
     
     def validate(self, data):
 
-        email = data.get('email')
         password = data.get('password')
         password2 = data.get('password2')
 
-        if CustomUser.objects.filter(email = email).exists():
-            raise serializers.ValidationError({"Error":"Email already exists."})
         
         if password != password2:
             raise serializers.ValidationError({"Error":"Password didn't match."})

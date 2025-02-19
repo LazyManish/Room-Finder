@@ -8,7 +8,7 @@ class RoomSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Room
-        fields = ['description','image','price','address']
+        fields = ['description','image','email','phone_number','address','price']
     
     def clean_price(self,validated_data):
         price = validated_data.get('price')
@@ -23,10 +23,10 @@ class GetRoomSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Room
-        fields = ['id','admin','description','image','price','address']
+        fields = ['id','admin','description','image','email','phone_number','address','price','is_availabe']
 
 class UpdateRoomSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Room
-        fields = ['description','image','price','address']
+        fields = ['description','image','email','phone_number','address','price','is_availabe']

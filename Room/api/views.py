@@ -61,7 +61,7 @@ class RoomAPIView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
         except Room.DoesNotExist:
-            return Response({"message":"Room not found."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message":"Room not found."}, status=status.HTTP_204_NO_CONTENT)
     
 
     def delete(self, request, pk):
@@ -75,12 +75,3 @@ class RoomAPIView(APIView):
         
         except Exception as e:
             return Response({"error":str(e)},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
-        
-
-
-
-
-
-    
-        

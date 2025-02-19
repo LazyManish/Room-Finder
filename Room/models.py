@@ -12,6 +12,9 @@ class Room(models.Model):
     image = models.ImageField(upload_to='room_images/', null=False, blank=False)
     price = models.IntegerField(validators=[MinValueValidator(0)])
     address = models.CharField(max_length=250, null=False, blank=False)
+    email = models.EmailField(null=True, blank=True)
+    phone_number = models.CharField( max_length=12, null=True, blank=True)
+    is_available = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
 
