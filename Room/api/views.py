@@ -1,7 +1,7 @@
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializers import RoomSerializer,GetRoomSerializer
+from .serializers import RoomSerializer,GetRoomSerializer,UpdateRoomSerializer
 from Room.models import Room
 from .permissions import IsAdminOnly
 
@@ -53,15 +53,15 @@ class RoomAPIView(APIView):
             admin=request.user
             data=request.data
 
-            room = Room.objects.get(pk=pk, admin=admin )  
-            serializer = RoomSerializer(room, data=data)
+            room = Room.objects.get(pk=pk)  
+            serializer = UpdateRoomSerializer(room, data=data, partial = True)
             if serializer.is_valid():
-                serializer.save()
+                serializer.save(admin=admin)
                 return Response(serializer.data)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-        except Exception as e:
-            return Response({"error":str(e)},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except Room.DoesNotExist:
+            return Response({"message":"Room not found."}, status=status.HTTP_400_BAD_REQUEST)
     
 
     def delete(self, request, pk):

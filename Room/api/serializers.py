@@ -25,3 +25,8 @@ class GetRoomSerializer(serializers.ModelSerializer):
         model = Room
         fields = ['id','admin','description','image','price','address']
 
+class UpdateRoomSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Room
+        fields = ['description','image','price','address']
